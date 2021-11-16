@@ -18,14 +18,14 @@
 }
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
-    if([keyPath isEqualToString:@"button.effectiveAppearance"]){
+    if([keyPath isEqualToString:@"button.effectiveAppearance"]||[keyPath isEqualToString:@"button.frame"]){
         NSStatusItem*item=object;
         NSAppearance*appearance=item.button.effectiveAppearance;
         NSString*appearanceName=(NSString*)(appearance.name);
         if([[appearanceName lowercaseString] containsString:@"dark"]){
-            item.button.title=@"dark";
+            item.button.title=[@"dark" stringByAppendingFormat:@" %@",@(item.button.frame.size.height)];
         }else{
-            item.button.title=@"light";
+            item.button.title=[@"dark" stringByAppendingFormat:@" %@",@(item.button.frame.size.height)];
         }
     }
 }
@@ -35,6 +35,7 @@
     item.button.title=@"foo";
     item.visible=YES;
     [item addObserver:self forKeyPath:@"button.effectiveAppearance" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
+    [item addObserver:self forKeyPath:@"button.frame" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     [o addObject:item];
 }
 
